@@ -4,10 +4,9 @@
 #include <vector>
 #include <string>
 #include "CommandResult.h"
+using namespace std;
 
-namespace Commands {
-    // Recibe un vector de strings (cada token es un parámetro)
-    CommandResult Mkdisk_Command(const std::vector<std::string>& tokens);
+namespace Commands{
+    CommandResult Mkdisk_Command(const vector<string>& tokens);
 }
-
 #endif

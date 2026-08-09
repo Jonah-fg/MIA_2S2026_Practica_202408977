@@ -2,11 +2,12 @@
 #define COMMAND_RESULT_H
 
 #include <string>
+using namespace std;
 
 namespace Commands {
     struct CommandResult {
-        bool success = false;   // true si los parámetros son válidos
-        std::string message;    // mensaje de éxito o de error
+        bool exito=false;
+        string mensaje;
     };
 }
 

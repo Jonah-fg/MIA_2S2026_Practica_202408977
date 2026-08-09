@@ -3,11 +3,9 @@
 
 #include <vector>
 #include <string>
-#include "../CommandResult.h"
 using namespace std;
 
-namespace Commands {
-    CommandResult Mkdisk_Command(const vector<string>& tokens);
+namespace Analyzer {
+    void Analyze(const vector<string>& entradas);
 }
-
-#endif  
+#endif

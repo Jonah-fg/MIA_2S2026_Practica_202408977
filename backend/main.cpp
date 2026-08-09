@@ -2,31 +2,34 @@
 #include <vector>
 #include <sstream>
 #include "Analyzer/Analyzer.h"
+
 using namespace std;
 
-static vector<string> splitLines(const string& texto) {
-    vector<string> lineas;
-    istringstream stream(texto);
-    string linea;
-    while (getline(stream, linea)) {
-        lineas.push_back(linea);
+static vector<string> splitLines(const string& text) {
+    vector<string> lines;
+    istringstream stream(text);
+    string line;
+    while (getline(stream, line)) {
+        lines.push_back(line);
     }
-    return lineas;
+    return lines;
 }
 
 int main() {
-    string codigo = 
-        "mkdisk -size=3000 -unit=M -path=/home/user/Disco1.mia\n"
-        "mkdisk -size=5 -unit=K -path=/home/user/Disco2.mia\n"
-        "mkdisk -size=10 -path=/home/user/Disco3.mia\n"
-        "mkdisk -size=-5 -path=/home/user/Disco4.mia\n"
-        "mkdisk -unit=X -size=100 -path=/home/user/Disco5.mia\n"
-        "mkdisk -size=100 -path=/home/user/Disco6.mia -fit=BF\n"
-        "mkdisk -path=/home/user/Disco7.mia\n";
+    string code= 
+"mkfile -size=15 -path=/home/user/docs/a.txt -f\n"          // válido
+"mkfile -path=\"/home/mis documentos/archivo 1.txt\"\n"      // válido con comillas
+"mkfile -path=/home/user/docs/b.txt -f -cont=/home/Documents/b.txt\n"  // válido
+"mkfile -size=15 -path=/home/user/docs/a.txt\n"             // válido
+"mkfile -path=/home/user/docs/a.txt -size=abc\n"            // error: size no numérico
+"mkfile -path=/home/user/docs/a.txt -size=-5\n"             // error: size negativo
+"mkfile -path=/home/user/docs/a.txt -cont=/archivo.txt\n"   // válido
+"mkfile -r -path=/home/user/a.txt\n"                        // error: -r no existe
+"mkfile\n";
 
-    vector<string> lineas = splitLines(codigo);
-    for (const auto& linea : lineas) {
-        Analyzer::Analyze({linea});
+    vector<string> lines=splitLines(code);
+    for (const auto& line: lines) {
+        Analyzer::Analyze({line});
     }
     return 0;
 }
