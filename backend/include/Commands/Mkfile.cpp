@@ -15,7 +15,7 @@ namespace Commands {
     static string unirTokens(const vector<string>& tokens) {
         string resultado;
         for (size_t i= 0; i<tokens.size(); ++i) {
-            if (i > 0)
+            if (i >0)
              resultado +=" ";
 
             resultado += tokens[i];
@@ -25,20 +25,17 @@ namespace Commands {
 
     CommandResult Mkfile_Command(const vector<string>& tokens) {
         string atributos=unirTokens(tokens);
-        static const regex expresion(
-            R"(-path="[^"]+"|-path=[^\s]+|-f|-size=\d+|-cont="[^"]+"|-cont=[^\s]+)",
-            regex::icase
-        );
+        static const regex expresion(R"(-path="[^"]+"|-path=[^\s]+|-f|-size=\d+|-cont="[^"]+"|-cont=[^\s]+)", regex::icase);
 
         vector<string> encontrados;
         auto begin =sregex_iterator(atributos.begin(), atributos.end(), expresion);
         auto end=sregex_iterator();
-        for (auto it=begin; it != end; ++it) {
+        for (auto it=begin; it!= end; ++it) {
             encontrados.push_back(it->str());
         }
 
         if (encontrados.size() != tokens.size()) {
-            for (const auto& token : tokens) {
+            for (const auto& token :tokens) {
                 if (!regex_search(token, expresion)) {
                     return {false, "ERROR: Paráetro no reconocido: " +token + " en comando MKFILE"};
                 }
@@ -49,15 +46,15 @@ namespace Commands {
         bool tieneSize=false;
         bool tieneCont = false;
         string pathVal = "";
-        int sizeVal = 0;
+        int sizeVal =0;
         string contVal ="";
 
         for (const auto& param : encontrados) {
             size_t eqPos= param.find('=');
             if (eqPos==string::npos) {
-                // Parámetro sin '=' (puede ser -f)
+                // Parámetro sin '=' (poaible -f)
                 string clave = aMinusculas(param);
-                if (clave=="-f") {
+                if (clave=="-f"){
                     tieneF= true;
                 } 
                 else {
@@ -65,9 +62,8 @@ namespace Commands {
                 }
                 continue;
             }
-
-            string clave = aMinusculas(param.substr(0, eqPos));
-            string valor = param.substr(eqPos + 1);
+            string clave =aMinusculas(param.substr(0, eqPos));
+            string valor= param.substr(eqPos + 1);
 
             if (valor.size()>=2 && valor.front() == '"' && valor.back()== '"') {
                 valor = valor.substr(1, valor.size() -2);
@@ -77,7 +73,7 @@ namespace Commands {
                 pathVal =valor;
                 tienePath =true;
             }
-            else if (clave == "-size") {
+            else if (clave=="-size") {
                 try{
                     size_t charsUsados = 0;
                     int size = stoi(valor, &charsUsados);
@@ -109,10 +105,10 @@ namespace Commands {
             mensaje += ", Crear carpetas si no existen (-f activado)";
         }
         if (tieneSize){
-            mensaje +=", Tamaño: " + to_string(sizeVal) + " bytes";
+            mensaje +=", Tamaño: "+ to_string(sizeVal) + " bytes";
         }
         if (tieneCont){
-            mensaje +=", Contenido desde: " + contVal;
+            mensaje +=", Contenido desde: "+ contVal;
         }
         return{true, mensaje};
     }

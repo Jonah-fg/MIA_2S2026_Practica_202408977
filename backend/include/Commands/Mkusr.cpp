@@ -9,14 +9,14 @@ using namespace std;
 namespace Commands{
 
     static string aMinusculas(string s) {
-        transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return tolower(c); });
+        transform(s.begin(), s.end(), s.begin(), [](unsigned char c) {return tolower(c); });
         return s;
     }
 
     static string unirTokens(const vector<string>& tokens) {
         string resultado;
         for (size_t i=0; i< tokens.size(); ++i) {
-            if (i > 0)
+            if (i >0)
              resultado += " ";
 
             resultado+=tokens[i];
@@ -25,12 +25,9 @@ namespace Commands{
     }
 
     CommandResult Mkusr_Command(const vector<string>& tokens) {
-        string atributos = unirTokens(tokens);
+        string atributos=unirTokens(tokens);
 
-        static const regex expresion(
-            R"(-user=[^\s]+|-pass=[^\s]+|-grp=[^\s]+)",
-            regex::icase
-        );
+        static const regex expresion(R"(-user=[^\s]+|-pass=[^\s]+|-grp=[^\s]+)",regex::icase);
 
         vector<string> encontrados;
         auto begin=sregex_iterator(atributos.begin(), atributos.end(), expresion);
@@ -42,14 +39,13 @@ namespace Commands{
         if (encontrados.size() != tokens.size()) {
             for (const auto& token : tokens) {
                 if (!regex_search(token, expresion)) {
-                    return {false, "ERROR: Parámetro no reconocido: " + token + " en comando MKUSR"};
+                    return {false, "ERROR: Parámetro no reconocido: " +token + " en comando MKUSR"};
                 }
             }
         }
 
-        bool tieneUser = false, tienePass = false, tieneGrp = false;
+        bool tieneUser=false, tienePass = false, tieneGrp = false;
         string userVal, passVal, grpVal;
-
         for (const auto& param : encontrados) {
             size_t eqPos = param.find('=');
             if (eqPos==string::npos) {
@@ -76,7 +72,7 @@ namespace Commands{
                 if(valor.length() > 10) {
                     return {false,"ERROR: El nombre del grupo excede los 10 caracteres permitidos"};
                 }
-                grpVal = valor;
+                grpVal =valor;
                 tieneGrp = true;
             }
             else{

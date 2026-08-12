@@ -14,7 +14,7 @@ namespace Commands {
 
     static string unirTokens(const vector<string>& tokens) {
         string resultado;
-        for (size_t i = 0; i < tokens.size(); ++i) {
+        for (size_t i = 0; i< tokens.size(); ++i) {
             if (i >0) 
             resultado +=" ";
 
@@ -24,7 +24,7 @@ namespace Commands {
     }
 
     CommandResult Rmusr_Command(const vector<string>& tokens) {
-        string atributos = unirTokens(tokens);
+        string atributos=unirTokens(tokens);
 
         static const regex expresion(R"(-user=[^\s]+)", regex::icase);
 
@@ -42,28 +42,26 @@ namespace Commands {
                 }
             }
         }
-
-        bool tieneUser = false;
-        string userVal = "";
+        bool tieneUser= false;
+        string userVal ="";
 
         for (const auto& param : encontrados) {
             size_t eqPos = param.find('=');
             if (eqPos==string::npos) {
                 return {false, "ERROR: Parámetro inválido: " + param};
             }
+            string clave= aMinusculas(param.substr(0, eqPos));
+            string valor= param.substr(eqPos + 1);
 
-            string clave = aMinusculas(param.substr(0, eqPos));
-            string valor = param.substr(eqPos + 1);
-
-            if (clave == "-user") {
+            if (clave =="-user") {
                 userVal = valor;
                 tieneUser = true;
             }
             else {
-                return {false, "ERROR: Parámetro no reconocido: " + clave};
+                return{false, "ERROR: Parámetro no reconocido: " + clave};
             }
         }
-        if (!tieneUser) {
+        if (!tieneUser){
             return {false, "ERROR: Falta el parámetro obligatorio -user en RMUSR"};
         }
         return {true, "RMUSR ejecutado correctamente. Usuario eliminado: " + userVal};

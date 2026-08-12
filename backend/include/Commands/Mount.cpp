@@ -31,7 +31,7 @@ namespace Commands {
         vector<string> encontrados;
         auto begin = sregex_iterator(atributos.begin(), atributos.end(), expresion);
         auto end=sregex_iterator();
-        for (auto it=begin; it !=end; ++it) {
+        for(auto it=begin; it !=end; ++it) {
             encontrados.push_back(it->str());
         }
 

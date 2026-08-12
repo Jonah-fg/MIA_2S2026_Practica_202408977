@@ -26,15 +26,31 @@ namespace Analyzer {
     }
 
   //Función para dividir una línea en tokens 
-    static vector<string> campos(const string& s){
-        vector<string> tokens;
-        istringstream iss(s);
-        string tok;
-        while (iss>>tok){
-            tokens.push_back(tok);
+    static vector<string> campos(const string& linea){
+    vector<string> tokens;
+    string token;
+    bool dentroDeComillas = false;
+
+    for (size_t i = 0; i < linea.size(); ++i) {
+        char c = linea[i];
+        if (c == '"') {
+            dentroDeComillas = !dentroDeComillas;
+            token += c;   // conservamos las comillas
+        } else if (c == ' ' && !dentroDeComillas) {
+            // Si no estamos dentro de comillas, el espacio separa tokens
+            if (!token.empty()) {
+                tokens.push_back(token);
+                token.clear();
+            }
+        } else {
+            token += c;
         }
-        return tokens;
     }
+    if (!token.empty()) {
+        tokens.push_back(token);
+    }
+    return tokens;
+}
 
     static string aMinusculas(string s) {
         transform(s.begin(), s.end(), s.begin(), [](unsigned char c){return tolower(c);});

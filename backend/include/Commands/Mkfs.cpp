@@ -14,8 +14,8 @@ namespace Commands {
 
     static string unirTokens(const vector<string>& tokens) {
         string resultado;
-        for (size_t i = 0; i < tokens.size();++i) {
-            if (i > 0) 
+        for (size_t i= 0; i< tokens.size();++i) {
+            if (i >0) 
             resultado +=" ";
 
             resultado+=tokens[i];
@@ -24,51 +24,45 @@ namespace Commands {
     }
 
     CommandResult Mkfs_Command(const vector<string>& tokens) {
-        string atributos = unirTokens(tokens);
+        string atributos=unirTokens(tokens);
 
-        // Parámetros: -id (obligatorio), -type (opcional, solo "full")
-        static const regex expresion(
-            R"(-id=[^\s]+|-type=full)",
-            regex::icase
-        );
+        static const regex expresion(R"(-id=[^\s]+|-type=full)", regex::icase);
 
         vector<string> encontrados;
         auto begin = sregex_iterator(atributos.begin(), atributos.end(), expresion);
-        auto end = sregex_iterator();
-        for (auto it = begin; it != end; ++it) {
+        auto end= sregex_iterator();
+        for (auto it=begin; it != end; ++it) {
             encontrados.push_back(it->str());
         }
 
-        // Verificar que todos los tokens sean válidos
+        // Verificacion tokns
         if (encontrados.size() != tokens.size()) {
             for (const auto& token : tokens) {
                 if (!regex_search(token, expresion)){
-                    return {false, "ERROR: Parámetro no reconocido: " + token + " en comando MKFS"};
+                    return {false, "ERROR: Parámetro no reconcido: " + token + " en comando MKFS"};
                 }
             }
         }
-
         bool tieneId =false;
         string idVal ="";
-        string typeVal ="full";  
+        string typeVal="full";  
 
         for (const auto& param : encontrados) {
-            size_t eqPos = param.find('=');
+            size_t eqPos=param.find('=');
             if (eqPos == string::npos) {
                 return {false, "ERROR: Parámetro inválido: " + param};
             }
-
-            string clave = aMinusculas(param.substr(0, eqPos));
+            string clave= aMinusculas(param.substr(0, eqPos));
             string valor = param.substr(eqPos + 1);
 
             if (clave=="-id") {
                 idVal = valor;
                 tieneId= true;
             }
-            else if (clave == "-type") {
+            else if (clave== "-type") {
                 string typeLower = aMinusculas(valor);
-                if (typeLower == "full") {
-                    typeVal = typeLower;
+                if (typeLower=="full") {
+                    typeVal=typeLower;
                 } 
                 else {
                     return {false, "ERROR: Tipo de formateo inválido. Use 'full'"};
@@ -83,8 +77,8 @@ namespace Commands {
             return {false, "ERROR: Falta el parmetro obligatorio -id en MKFS"};
         }
 
-        string mensaje = "MKFS ejecutado correctamente. ID: " + idVal + ", Tipo: " + typeVal;
+        string mensaje="MKFS ejecutado correctamete. ID: " + idVal + ", Tipo: " + typeVal;
         return {true, mensaje};
     }
 
-} // namespace Commands
+} 
